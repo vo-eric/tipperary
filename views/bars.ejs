@@ -1,0 +1,14 @@
+<% include partials/header %>
+
+<h1>All Bars</h1>
+
+<% bars.forEach((bar) => { %>
+  <div>
+    <h4>
+      <%= bar.name %>
+    </h4>
+    <img src="<%= bar.image %>">
+  </div>
+<% }); %>
+
+<% include partials/footer %> 
