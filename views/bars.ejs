@@ -1,14 +1,29 @@
 <% include partials/header %>
 
-<h1>All Bars</h1>
-
-<% bars.forEach((bar) => { %>
-  <div>
-    <h4>
-      <%= bar.name %>
-    </h4>
-    <img src="<%= bar.image %>">
+<div class="container">
+  <header class="jumbotron">
+    <div class="container">
+      <h1>Tipperary</h1>
+      <p>The Best Bars in the World</p>
+      <p>
+        <a class="btn btn-primary btn-lg" href="/bars/new">Add a New Bar</a>
+      </p>
+    </div>
+  </header>
+  
+  
+  <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+    <% bars.forEach((bar) => { %>
+      <div class="col-md-3 col-sm-6">
+        <div class="thumbnail">
+          <img src="<%= bar.image %>">
+          <div class="caption">
+            <h4><%= bar.name %></h4>
+          </div>
+        </div>
+      </div>
+    <% }); %>
   </div>
-<% }); %>
+</div>
 
 <% include partials/footer %> 
