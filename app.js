@@ -1,33 +1,13 @@
-let express       = require('express');
-    app           = express();
-    bodyParser    = require('body-parser');
-    mongoose      = require('mongoose');
+let express       = require('express'),
+    app           = express(),
+    bodyParser    = require('body-parser'),
+    mongoose      = require('mongoose'),
+    Bar           = require('./models/bar')
 
 
 mongoose.connect('mongodb://localhost/tipperary');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
-
-
-let barsSchema = new mongoose.Schema({
-  name: String,
-  image: String
-})
-
-let Bar = mongoose.model('Bar', barsSchema);
-
-// Bar.create(
-//   {
-//     name: 'Varnish', image: 'https://farm8.staticflickr.com/7168/6409338719_ed9cb1b5df.jpg',
-//   }, (err, bar) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       console.log("new bar");
-//       console.log(bar);
-//     }
-//   }
-// )
 
 app.get('/', (req, res) => {
   res.render('landing');
@@ -38,7 +18,7 @@ app.get('/bars', (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.render('bars', { bars });
+      res.render('index', { bars });
     }
   });
 });
@@ -46,12 +26,13 @@ app.get('/bars', (req, res) => {
 app.post('/bars', (req, res) => {
   let name = req.body.name;
   let image = req.body.image;
-  let newBar = {name: name, image: image};
+  let desc = req.body.description;
+  let newBar = {name: name, image: image, description: desc};
   Bar.create(newBar, (err, newlyCreatedBar) => {
     if (err) {
       console.log(err);
     } else {
-      res.redirect('bars');
+      res.redirect('/bars');
     }
   });
 });
@@ -59,6 +40,17 @@ app.post('/bars', (req, res) => {
 app.get('/bars/new', (req, res) => {
   res.render('new');
 });
+
+app.get('/bars/:id', (req, res) => {
+  Bar.findById(req.params.id, (err, chosenBar) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('show', { bar: chosenBar })
+    }
+  });
+});
+
 
 app.listen(3000, () => {
   console.log('Tipperary server has started');

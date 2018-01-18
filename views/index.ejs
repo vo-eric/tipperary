@@ -10,8 +10,8 @@
       </p>
     </div>
   </header>
-  
-  
+
+
   <div class="row text-center" style="display:flex; flex-wrap: wrap;">
     <% bars.forEach((bar) => { %>
       <div class="col-md-3 col-sm-6">
@@ -20,10 +20,13 @@
           <div class="caption">
             <h4><%= bar.name %></h4>
           </div>
+          <p>
+            <a class="btn btn-primary" href="/bars/<%= bar._id %>">More Info</a>
+          </p>
         </div>
       </div>
     <% }); %>
   </div>
 </div>
 
-<% include partials/footer %> 
+<% include partials/footer %>
