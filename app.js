@@ -2,9 +2,10 @@ let express       = require('express'),
     app           = express(),
     bodyParser    = require('body-parser'),
     mongoose      = require('mongoose'),
-    Bar           = require('./models/bar')
+    Bar           = require('./models/bar'),
+    seedDb        = require('./seeds');
 
-
+seedDb();
 mongoose.connect('mongodb://localhost/tipperary');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -42,10 +43,11 @@ app.get('/bars/new', (req, res) => {
 });
 
 app.get('/bars/:id', (req, res) => {
-  Bar.findById(req.params.id, (err, chosenBar) => {
+  Bar.findById(req.params.id).populate('comments').exec((err, chosenBar) => {
     if (err) {
       console.log(err);
     } else {
+      console.log(chosenBar);
       res.render('show', { bar: chosenBar })
     }
   });
