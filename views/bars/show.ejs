@@ -1,4 +1,4 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
 <h1><%= bar.name %></h1>
 
@@ -6,10 +6,14 @@
 
 <p><%= bar.description %></p>
 
+<p>
+  <a class="btn btn-success" href="/bars/<%= bar._id %>/comments/new">Add a Comment</a>
+</p>
+
 <% bar.comments.forEach((comment) => { %>
   <p>
     <strong><%= comment.author %></strong> - <%= comment.text %>
   </p>
 <% }); %>
 
-<% include partials/footer %>
+<% include ../partials/footer %>

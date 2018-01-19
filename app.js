@@ -3,6 +3,7 @@ let express       = require('express'),
     bodyParser    = require('body-parser'),
     mongoose      = require('mongoose'),
     Bar           = require('./models/bar'),
+    Comment       = require('./models/comment'),
     seedDb        = require('./seeds');
 
 seedDb();
@@ -19,7 +20,7 @@ app.get('/bars', (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.render('index', { bars });
+      res.render('bars/index', { bars });
     }
   });
 });
@@ -39,7 +40,7 @@ app.post('/bars', (req, res) => {
 });
 
 app.get('/bars/new', (req, res) => {
-  res.render('new');
+  res.render('bars/new');
 });
 
 app.get('/bars/:id', (req, res) => {
@@ -48,7 +49,45 @@ app.get('/bars/:id', (req, res) => {
       console.log(err);
     } else {
       console.log(chosenBar);
-      res.render('show', { bar: chosenBar })
+      res.render('bars/show', { bar: chosenBar })
+    }
+  });
+});
+
+
+
+
+
+
+// ==========================
+// COMMENTS ROUTES
+// ==========================
+
+app.get('/bars/:id/comments/new', (req, res) => {
+  Bar.findById(req.params.id, (err, bar) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('comments/new', { bar });
+    }
+  })
+});
+
+app.post('/bars/:id/comments', (req, res) => {
+  Bar.findById(req.params.id, (err, bar) => {
+    if (err) {
+      console.log(err);
+      res.redirect('/bars');
+    } else {
+      Comment.create(req.body.comment, (err, comment) => {
+        if (err) {
+          console.log(err);
+        } else {
+          bar.comments.push(comment._id);
+          bar.save();
+          res.redirect(`/bars/${bar._id}`)
+        }
+      });
     }
   });
 });
