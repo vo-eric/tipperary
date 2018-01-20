@@ -2,6 +2,9 @@ let express       = require('express'),
     app           = express(),
     bodyParser    = require('body-parser'),
     mongoose      = require('mongoose'),
+    passport      = require('passport'),
+    LocalStrategy = require('passport-local'),
+    User          = require('./models/user'),
     Bar           = require('./models/bar'),
     Comment       = require('./models/comment'),
     seedDb        = require('./seeds');
@@ -11,6 +14,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 seedDb();
+
+
+//CONFIGURE PASSPORT
+app.use(require('express-session')({
+  secret: 'Irish Whisky Green Chartreuse Sweet Vermouth',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req, res) => {
   res.render('landing');
@@ -56,10 +73,6 @@ app.get('/bars/:id', (req, res) => {
 });
 
 
-
-
-
-
 // ==========================
 // COMMENTS ROUTES
 // ==========================
@@ -91,6 +104,45 @@ app.post('/bars/:id/comments', (req, res) => {
       });
     }
   });
+});
+
+
+
+//====================================
+//AUTH ROUTES
+//====================================
+
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+app.post('/register', (req, res) => {
+  let newUser = new User({username: req.body.username});
+  User.register(newUser, req.body.password, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.render('/register')
+    }
+    passport.authenticate('local')(req, res, () => {
+      res.redirect('/bars');
+    });
+  });
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.post('/login', passport.authenticate('local',
+  {
+    successRedirect: '/bars',
+    failureRedirect: '/login'
+  }), (req, res) => {
+});
+
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/bars');
 });
 
 
