@@ -6,10 +6,11 @@ let express       = require('express'),
     Comment       = require('./models/comment'),
     seedDb        = require('./seeds');
 
-seedDb();
 mongoose.connect('mongodb://localhost/tipperary');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
+seedDb();
 
 app.get('/', (req, res) => {
   res.render('landing');

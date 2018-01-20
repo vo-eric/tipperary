@@ -1,19 +1,46 @@
 <% include ../partials/header %>
 
-<h1><%= bar.name %></h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <p class="lead">Tipperary</p>
+      <div class="list-group">
+        <li class="list-group-item active">Item Ein</li>
+        <li class="list-group-item">Zwei</li>
+        <li class="list-group-item">Drei</li>
+      </div>
+    </div>
 
-<img src="<%= bar.image %>">
+    <div class="col-md-9">
+      <div class="thumbnail">
+        <img class="image-responsive" src="<%= bar.image %>">
+        <div class="caption-full">
+          <h4 class="pull-right">$$$$</h4>
+          <h4><%= bar.name %></h4>
+          <p><%= bar.description %></p>
+        </div>
+      </div>
 
-<p><%= bar.description %></p>
+      <div class="well">
+        <div class="text-right">
+          <a class="btn btn-success" href="/bars/<%= bar._id %>/comments/new">Add a Comment</a>
+        </div>
+        <hr>
+        <% bar.comments.forEach((comment) => { %>
+          <div class="row">
+            <div class="col-md-12">
+              <%= comment.author %>
+              <span class="pull-right">10 days ago</span>
+              <p>
+                <strong><%= comment.text %></strong>
+              </p>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </div>
 
-<p>
-  <a class="btn btn-success" href="/bars/<%= bar._id %>/comments/new">Add a Comment</a>
-</p>
-
-<% bar.comments.forEach((comment) => { %>
-  <p>
-    <strong><%= comment.author %></strong> - <%= comment.text %>
-  </p>
-<% }); %>
+</div>
 
 <% include ../partials/footer %>
