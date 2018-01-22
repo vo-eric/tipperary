@@ -25,33 +25,33 @@ let data = [
 
 const seedDb = () => {
   Bar.remove({}, (err) => {
-    if (err) {
-      console.log(err);
-    }
-    console.log("Database has been cleared");
-    data.forEach((seed) => {
-      Bar.create(seed, (err, bar) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('A bar has been added to the database');
-          Comment.create(
-            {
-              text: 'This is a great bar',
-              author: 'Doug'
-            }, (err, comment) => {
-              if (err) {
-                console.log(err);
-              } else {
-                bar.comments.push(comment._id);
-                bar.save();
-                console.log('created new comment');
-              }
-            }
-          );
-        }
-      });
-    });
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   console.log("Database has been cleared");
+  //   data.forEach((seed) => {
+  //     Bar.create(seed, (err, bar) => {
+  //       if (err) {
+  //         console.log(err);
+  //       } else {
+  //         console.log('A bar has been added to the database');
+  //         Comment.create(
+  //           {
+  //             text: 'This is a great bar',
+  //             author: 'Doug'
+  //           }, (err, comment) => {
+  //             if (err) {
+  //               console.log(err);
+  //             } else {
+  //               bar.comments.push(comment._id);
+  //               bar.save();
+  //               console.log('created new comment');
+  //             }
+  //           }
+  //         );
+  //       }
+  //     });
+  //   });
   });
 }
 
