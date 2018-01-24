@@ -1,17 +1,18 @@
-let express       = require('express'),
-    app           = express(),
-    bodyParser    = require('body-parser'),
-    mongoose      = require('mongoose'),
-    passport      = require('passport'),
-    LocalStrategy = require('passport-local'),
-    User          = require('./models/user'),
-    Bar           = require('./models/bar'),
-    Comment       = require('./models/comment'),
-    seedDb        = require('./seeds');
+let express           = require('express'),
+    app               = express(),
+    bodyParser        = require('body-parser'),
+    mongoose          = require('mongoose'),
+    passport          = require('passport'),
+    methodOverride    = require('method-override');
+    LocalStrategy     = require('passport-local'),
+    User              = require('./models/user'),
+    Bar               = require('./models/bar'),
+    Comment           = require('./models/comment'),
+    seedDb            = require('./seeds');
 
-let commentRoutes = require('./routes/comments'),
-    barRoutes     = require('./routes/bars'),
-    authRoutes    = require('./routes/auth');
+let commentRoutes     = require('./routes/comments'),
+    barRoutes         = require('./routes/bars'),
+    authRoutes        = require('./routes/auth');
 
 
 
@@ -19,6 +20,7 @@ mongoose.connect('mongodb://localhost/tipperary');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
+app.use(methodOverride("_method"));
 // seedDb();
 
 app.use(require('express-session')({

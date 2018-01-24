@@ -44,6 +44,27 @@ router.get('/:id', (req, res) => {
   });
 });
 
+router.get('/:id/edit', (req, res) => {
+  Bar.findById(req.params.id, (err, foundBar) => {
+    if (err) {
+      res.redirect('/bars');
+    } else {
+      res.render('bars/edit', {bar: foundBar});
+    }
+  });
+});
+
+router.put('/:id', (req, res) => {
+  Bar.findByIdAndUpdate(req.params.id, req.body.bar, (err, updatedBar) => {
+    if (err) {
+      res.redirect('/bars');
+    } else {
+      res.redirect(`/bars/${req.params.id}`)
+    }
+  })
+});
+
+
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
