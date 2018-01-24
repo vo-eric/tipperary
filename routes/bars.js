@@ -12,11 +12,15 @@ router.get('/', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
+router.post('/', isLoggedIn,(req, res) => {
   let name = req.body.name;
   let image = req.body.image;
   let desc = req.body.description;
-  let newBar = {name: name, image: image, description: desc};
+  let author = {
+    id: req.user._id,
+    username: req.user.username
+  }
+  let newBar = {name: name, image: image, description: desc, author: author};
   Bar.create(newBar, (err, newlyCreatedBar) => {
     if (err) {
       console.log(err);
@@ -26,7 +30,7 @@ router.post('/', (req, res) => {
   });
 });
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
   res.render('bars/new');
 });
 
@@ -39,6 +43,13 @@ router.get('/:id', (req, res) => {
     }
   });
 });
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
 
 
 module.exports = router;
