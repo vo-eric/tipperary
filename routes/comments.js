@@ -3,7 +3,9 @@ let express         = require('express'),
     Bar             = require('../models/bar'),
     Comment         = require('../models/comment');
 
-
+//======================================
+//COMMENT NEW ROUTE
+//======================================
 router.get('/new', isLoggedIn, (req, res) => {
   Bar.findById(req.params.id, (err, bar) => {
     if (err) {
@@ -14,6 +16,9 @@ router.get('/new', isLoggedIn, (req, res) => {
   })
 });
 
+//======================================
+//COMMENT POST ROUTE
+//======================================
 router.post('/', isLoggedIn, (req, res) => {
   Bar.findById(req.params.id, (err, bar) => {
     if (err) {
@@ -25,7 +30,7 @@ router.post('/', isLoggedIn, (req, res) => {
           console.log(err);
         } else {
           comment.author.id = req.user._id;
-          comment.auther.username = req.user.username;
+          comment.author.username = req.user.username;
           comment.save();
           bar.comments.push(comment._id);
           bar.save();
@@ -35,6 +40,46 @@ router.post('/', isLoggedIn, (req, res) => {
     }
   });
 });
+
+//======================================
+//COMMENT EDIT ROUTE
+//======================================
+router.get('/:comment_id/edit', (req, res) => {
+  Comment.findById(req.params.comment_id, (err, foundComment) => {
+    if (err) {
+      res.redirect('back');
+    } else {
+      res.render('comments/edit', {bar_id: req.params.id, comment: foundComment});
+    }
+  })
+});
+
+//======================================
+//COMMENT UPDATE ROUTE
+//======================================
+router.put('/:comment_id', (req, res) => {
+  Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment)=> {
+    if (err) {
+      res.redirect('back');
+    } else {
+      res.redirect(`/bars/${req.params.id}`);
+    }
+  });
+});
+
+//======================================
+//COMMENT DESTEROY ROUTE
+//======================================
+router.delete('/:comment_id', (req, res) => {
+  Comment.findByIdAndRemove(req.params.comment_id, (err) => {
+    if (err) {
+      res.redirect('back');
+    } else {
+      res.redirect(`/bars/${req.params.id}`);
+    }
+  })
+});
+
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {

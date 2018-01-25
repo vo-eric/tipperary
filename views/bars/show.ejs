@@ -21,10 +21,10 @@
           <p>
             <em>Submitted By <%= bar.author.username %></em>
           </p>
-          <% if (bar.author.id.equals(currentUser._id)) { %>
+          <% if (currentUser && bar.author.id.equals(currentUser._id)) { %>
             <a class="btn btn-warning" href="/bars/<%= bar._id %>/edit">Edit</a>
-            <form id="delete-form" action="/bars/<%= bar._id %>?_method=DELETE" method="post">
-              <button class="btn btn-danger">Delete</button>
+            <form class="delete-form" action="/bars/<%= bar._id %>?_method=DELETE" method="post">
+              <input type="submit" class="btn btn-danger" value="Delete">
             </form>
           <% } %>
         </div>
@@ -43,6 +43,14 @@
               <p>
                 <strong><%= comment.text %></strong>
               </p>
+              <a
+                class="btn btn-xs btn-warning"
+                href="/bars/<%= bar._id %>/comments/<%= comment._id %>/edit">
+                Edit
+              </a>
+              <form class="delete-form" action="/bars/<%= bar._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+              </form>
             </div>
           </div>
         <% }); %>
