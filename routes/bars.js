@@ -64,6 +64,16 @@ router.put('/:id', (req, res) => {
   })
 });
 
+router.delete('/:id', (req, res) => {
+  Bar.findByIdAndRemove(req.params.id, (err) => {
+    if(err) {
+      res.redirect('/bars');
+    } else {
+      res.redirect('/bars');
+    }
+  });
+})
+
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
