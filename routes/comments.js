@@ -35,7 +35,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
           comment.save();
           bar.comments.push(comment._id);
           bar.save();
-          res.flash('success', 'Successfully added comment');
+          req.flash('success', 'Successfully added comment');
           res.redirect(`/bars/${bar._id}`)
         }
       });

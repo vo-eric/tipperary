@@ -1,65 +1,62 @@
 <% include ../partials/header %>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-3">
-      <p class="lead">Tipperary</p>
-      <div class="list-group">
-        <li class="list-group-item active">Item Ein</li>
-        <li class="list-group-item">Zwei</li>
-        <li class="list-group-item">Drei</li>
-      </div>
-    </div>
-
-    <div class="col-md-9">
-      <div class="thumbnail">
-        <img class="image-responsive" src="<%= bar.image %>">
-        <div class="caption-full">
-          <h4 class="pull-right">$$$$</h4>
-          <h4><%= bar.name %></h4>
-          <p><%= bar.description %></p>
-          <p>
-            <em>Submitted By <%= bar.author.username %></em>
-          </p>
-          <% if (currentUser && bar.author.id.equals(currentUser._id)) { %>
-            <a class="btn btn-warning" href="/bars/<%= bar._id %>/edit">Edit</a>
-            <form class="delete-form" action="/bars/<%= bar._id %>?_method=DELETE" method="post">
-              <input type="submit" class="btn btn-danger" value="Delete">
-            </form>
-          <% } %>
-        </div>
-      </div>
-
-      <div class="well">
-        <div class="text-right">
-          <a class="btn btn-success" href="/bars/<%= bar._id %>/comments/new">Add a Comment</a>
-        </div>
-        <hr>
-        <% bar.comments.forEach((comment) => { %>
-          <div class="row">
-            <div class="col-md-12">
-              <%= comment.author.username %>
-              <span class="pull-right">10 days ago</span>
-              <p>
-                <strong><%= comment.text %></strong>
-              </p>
-              <% if (currentUser && comment.author.id.equals(currentUser._id)) { %>
-                <a
-                class="btn btn-xs btn-warning"
-                href="/bars/<%= bar._id %>/comments/<%= comment._id %>/edit">
-                Edit
-              </a>
-              <form class="delete-form" action="/bars/<%= bar._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
-                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-              </form>
-              <% } %>
-            </div>
-          </div>
-        <% }); %>
-      </div>
+<div class="row">
+  <div class="col-md-3">
+    <p class="lead">Tipperary</p>
+    <div class="list-group">
+      <li class="list-group-item active">Item Ein</li>
+      <li class="list-group-item">Zwei</li>
+      <li class="list-group-item">Drei</li>
     </div>
   </div>
 
+  <div class="col-md-9">
+    <div class="thumbnail">
+      <img class="image-responsive" src="<%= bar.image %>">
+      <div class="caption-full">
+        <h4 class="pull-right">$<%= bar.price %></h4>
+        <h4><%= bar.name %></h4>
+        <p><%= bar.description %></p>
+        <p>
+          <em>Submitted By <%= bar.author.username %>, <%= moment(bar.createdAt).fromNow() %></em>
+        </p>
+        <% if (currentUser && bar.author.id.equals(currentUser._id)) { %>
+          <a class="btn btn-warning" href="/bars/<%= bar._id %>/edit">Edit</a>
+          <form class="delete-form" action="/bars/<%= bar._id %>?_method=DELETE" method="post">
+            <input type="submit" class="btn btn-danger" value="Delete">
+          </form>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="well">
+      <div class="text-right">
+        <a class="btn btn-success" href="/bars/<%= bar._id %>/comments/new">Add a Comment</a>
+      </div>
+      <hr>
+      <% bar.comments.forEach((comment) => { %>
+        <div class="row">
+          <div class="col-md-12">
+            <%= comment.author.username %>
+            <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
+            <p>
+              <strong><%= comment.text %></strong>
+            </p>
+            <% if (currentUser && comment.author.id.equals(currentUser._id)) { %>
+              <a
+              class="btn btn-xs btn-warning"
+              href="/bars/<%= bar._id %>/comments/<%= comment._id %>/edit">
+              Edit
+            </a>
+            <form class="delete-form" action="/bars/<%= bar._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
+              <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+            </form>
+            <% } %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
 </div>
 
 <% include ../partials/footer %>

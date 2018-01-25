@@ -3,7 +3,7 @@ let express           = require('express'),
     mongoose          = require('mongoose'),
     passport          = require('passport'),
     flash             = require('connect-flash'),
-    methodOverride    = require('method-override');
+    methodOverride    = require('method-override'),
     LocalStrategy     = require('passport-local'),
     User              = require('./models/user'),
     Bar               = require('./models/bar'),
@@ -23,6 +23,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 app.use(methodOverride("_method"));
 app.use(flash());
+app.locals.moment = require('moment');
 // seedDb();
 
 app.use(require('express-session')({

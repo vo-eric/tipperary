@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.render('bars/index', {bars});
+      res.render('bars/index', {bars: bars, page:'bars'});
     }
   });
 });
@@ -23,12 +23,13 @@ router.get('/', (req, res) => {
 router.post('/', middleware.isLoggedIn, (req, res) => {
   let name = req.body.name;
   let image = req.body.image;
+  let price = req.body.price;
   let desc = req.body.description;
   let author = {
     id: req.user._id,
     username: req.user.username
   }
-  let newBar = {name: name, image: image, description: desc, author: author};
+  let newBar = {name: name, image: image, description: desc, author: author, price: price};
   Bar.create(newBar, (err, newlyCreatedBar) => {
     if (err) {
       console.log(err);
