@@ -47,11 +47,12 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 //===============================================
 
 router.get('/:id', (req, res) => {
-  Bar.findById(req.params.id).populate('comments').exec((err, chosenBar) => {
-    if (err) {
-      console.log(err);
+  Bar.findById(req.params.id).populate('comments').exec((err, foundBar) => {
+    if (err || !foundBar) {
+      req.flash('error', 'That bar does not exist');
+      res.redirect('back');
     } else {
-      res.render('bars/show', { bar: chosenBar })
+      res.render('bars/show', { bar: foundBar })
     }
   });
 });
@@ -64,6 +65,10 @@ router.get('/:id/edit', middleware.checkOwnership, (req, res) => {
     res.render('bars/edit', {bar: foundBar});
   });
 });
+
+//===============================================
+//UPDATE ROUTE
+//===============================================
 
 router.put('/:id', (req, res) => {
   Bar.findByIdAndUpdate(req.params.id, req.body.bar, (err, updatedBar) => {

@@ -23,7 +23,7 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 router.post('/', middleware.isLoggedIn, (req, res) => {
   Bar.findById(req.params.id, (err, bar) => {
     if (err) {
-      console.log(err);
+      res.flash('error', 'Your comment was not added');
       res.redirect('/bars');
     } else {
       Comment.create(req.body.comment, (err, comment) => {
@@ -35,6 +35,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
           comment.save();
           bar.comments.push(comment._id);
           bar.save();
+          res.flash('success', 'Successfully added comment');
           res.redirect(`/bars/${bar._id}`)
         }
       });
@@ -46,13 +47,20 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 //COMMENT EDIT ROUTE
 //======================================
 router.get('/:comment_id/edit', middleware.checkCommentOwnership, (req, res) => {
-  Comment.findById(req.params.comment_id, (err, foundComment) => {
-    if (err) {
-      res.redirect('back');
-    } else {
-      res.render('comments/edit', {bar_id: req.params.id, comment: foundComment});
+  Bar.findById(req.params.id, (err, foundBar) => {
+    if (err || !foundBar) {
+      req.flash('error', 'That bar does not exist');
+      return res.redirect('back');
     }
-  })
+
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+      if (err) {
+        res.redirect('back');
+      } else {
+        res.render('comments/edit', {bar_id: req.params.id, comment: foundComment});
+      }
+    });
+  });
 });
 
 //======================================
@@ -76,6 +84,7 @@ router.delete('/:comment_id', middleware.checkCommentOwnership, (req, res) => {
     if (err) {
       res.redirect('back');
     } else {
+      req.flash('success', 'Your comment was deleted');
       res.redirect(`/bars/${req.params.id}`);
     }
   })
