@@ -2,6 +2,10 @@ let express   = require('express'),
     router    = express.Router(),
     Bar       = require('../models/bar');
 
+//===============================================
+//INDEX ROUTE
+//===============================================
+
 router.get('/', (req, res) => {
   Bar.find({}, (err, bars) => {
     if (err) {
@@ -12,6 +16,9 @@ router.get('/', (req, res) => {
   });
 });
 
+//===============================================
+//CREATE ROUTE
+//===============================================
 router.post('/', isLoggedIn,(req, res) => {
   let name = req.body.name;
   let image = req.body.image;
@@ -34,6 +41,10 @@ router.get('/new', isLoggedIn, (req, res) => {
   res.render('bars/new');
 });
 
+//===============================================
+//SHOW ROUTE
+//===============================================
+
 router.get('/:id', (req, res) => {
   Bar.findById(req.params.id).populate('comments').exec((err, chosenBar) => {
     if (err) {
@@ -44,13 +55,12 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.get('/:id/edit', (req, res) => {
+//===============================================
+//EDIT ROUTE
+//===============================================
+router.get('/:id/edit', checkOwnership, (req, res) => {
   Bar.findById(req.params.id, (err, foundBar) => {
-    if (err) {
-      res.redirect('/bars');
-    } else {
-      res.render('bars/edit', {bar: foundBar});
-    }
+    res.render('bars/edit', {bar: foundBar});
   });
 });
 
@@ -64,7 +74,11 @@ router.put('/:id', (req, res) => {
   })
 });
 
-router.delete('/:id', (req, res) => {
+//===============================================
+//DELETE ROUTE
+//===============================================
+
+router.delete('/:id', checkOwnership, (req, res) => {
   Bar.findByIdAndRemove(req.params.id, (err) => {
     if(err) {
       res.redirect('/bars');
@@ -74,6 +88,27 @@ router.delete('/:id', (req, res) => {
   });
 })
 
+//===============================================
+//VALIDATIONS
+//===============================================
+
+function checkOwnership(req, res, next) {
+  if (req.isAuthenticated()) {
+    Bar.findById(req.params.id, (err, foundBar) => {
+      if (err) {
+        res.redirect('back');
+      } else {
+        if (foundBar.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          res.redirect('back');
+        }
+      }
+    });
+  } else {
+    res.redirect('back');
+  }
+}
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
