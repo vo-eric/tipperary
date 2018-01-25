@@ -1,0 +1,82 @@
+body {
+  background-color: #000;
+}
+
+#landing-header {
+  z-index: 1;
+  position: relative;
+  text-align: center;
+  padding-top: 40vh;
+  color: #fff;
+}
+
+.slideshow {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.slideshow li {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  z-index: 0;
+  animation: slideshow 25s linear infinite;
+}
+
+.slideshow li:nth-child(1) {
+  background-image: url(https://images.unsplash.com/photo-1468056961052-15507578a50d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a6464285ebfa529f5a355fd9df34b896&auto=format&fit=crop&w=1567&q=80);
+}
+
+.slideshow li:nth-child(2) {
+  background-image: url(https://images.unsplash.com/photo-1470337458703-46ad1756a187?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=1998822d443cf97d75258149476c5aa5&auto=format&fit=crop&w=1649&q=80);
+  animation-delay: 5s;
+}
+
+.slideshow li:nth-child(3) {
+  background-image: url(https://images.unsplash.com/photo-1438522014717-d7ce32b9bab9?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=55cb1a59dd5a3cecf474342bc3048ea7&auto=format&fit=crop&w=2549&q=80);
+  animation-delay: 10s;
+}
+
+.slideshow li:nth-child(4) {
+  background-image: url(https://images.unsplash.com/photo-1500217052183-bc01eee1a74e?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=83e5d3e676230de77a2c78f9563d1933&auto=format&fit=crop&w=1234&q=80);
+  animation-delay: 15s;
+}
+
+.slideshow li:nth-child(5) {
+  background-image: url(https://images.unsplash.com/photo-1453825012366-3738046cb6c7?ixlib=rb-0.3.5&s=00752ec824e669284341c7fb4e97a724&auto=format&fit=crop&w=3289&q=80);
+  animation-delay: 20s;
+}
+
+@keyframes slideshow {
+  0% {
+    opacity: 0;
+    animation-timing-function: ease-in;
+  }
+  10% {
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  20% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+}
+
+.no-cssanimations .slideshow li {
+	opacity: 1;
+}

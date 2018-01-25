@@ -1,5 +1,4 @@
 let express           = require('express'),
-    app               = express(),
     bodyParser        = require('body-parser'),
     mongoose          = require('mongoose'),
     passport          = require('passport'),
@@ -9,7 +8,8 @@ let express           = require('express'),
     User              = require('./models/user'),
     Bar               = require('./models/bar'),
     Comment           = require('./models/comment'),
-    seedDb            = require('./seeds');
+    seedDb            = require('./seeds'),
+    app               = express();
 
 let commentRoutes     = require('./routes/comments'),
     barRoutes         = require('./routes/bars'),
